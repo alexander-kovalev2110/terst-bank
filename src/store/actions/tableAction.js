@@ -5,6 +5,7 @@ export const SET_TABLE = "SET_TABLE"
 export const SET_PAGE = "SET_PAGE"
 export const NEXT_PAGE = "NEXT_PAGE"
 export const PREVIOUS_PAGE = "PREVIOUS_PAGE"
+export const SELECTED = "SELECTED"
 
 export const setTable = (data) => ({
     type: SET_TABLE,
@@ -24,11 +25,14 @@ export const nextPage = () => ({
     type: NEXT_PAGE
 })
 
+export const setSelected = (selec) => ({     // Оновлення масиву Selected
+    type: SELECTED,
+    selec: selec
+})
+
 export const fetchData = async () => {
     try {
         await store.dispatch(setTable(data))
-        // console.log("data:", data)
-        // store.dispatch(resetTrans())
     } catch (err) {
         console.log("Помилка читання файлу:", err)
     }

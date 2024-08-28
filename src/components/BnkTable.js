@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import { useSelector, useDispatch } from "react-redux"
 
 import Box from "@mui/material/Box"
@@ -17,21 +18,51 @@ import NavigateNextIcon from "@mui/icons-material/NavigateNext"
 import { nextPage, previousPage } from "../store/actions/tableAction"
 
 export const BankTable = () => {
-    const { tabData, column, prev, next } = useSelector(state => ({
+    const { tabData, column, prev, next, data } = useSelector(state => ({
         prev: state.tableRed.prev,
         next: state.tableRed.next,
         tabData: state.tableRed.tabData,
-        column: state.tableRed.column
+        column: state.tableRed.column,
+        data: state.tableRed.data
     }))
 
-    const dispatch = useDispatch()
+    const [selected, setSelected] = useState([])
+    const [selectAll, setSelectedAll] = useState(false)
+    
+        const dispatch = useDispatch()
 
-    const handleSelect = (index) => {
-        console.log("Вибрано рядок: ", index)
+    const handleSelect = (pay) => {
+        console.log("handleSelect")
+        let newSelected = selected
+        const i = selected.indexOf(pay[0])
+        if (i === -1) {
+            newSelected.push(pay[0])     // Додавання індексу до масиву selected
+        } else {
+            newSelected.splice(i, 1)     // Видалення індексу з масиву selected
+        }
+        
+        setSelected(newSelected)
+        dispatch(nextPage())
+        dispatch(previousPage())
     }
 
     const handleSelectAll = () => {
-        console.log("Вибрані всі")
+        let newSelected = []
+        if (!selectAll) {
+            data.map((item) => {
+                newSelected.push(item.pay)
+            })
+            setSelectedAll(true)
+        } else {
+            setSelectedAll(false)
+        }
+
+        setSelected(newSelected)
+    }
+
+    const isSelected = (pay) =>  { 
+        if (selected.indexOf(pay[0]) !== -1) return true
+        else return false
     }
 
     const datacol = tabData.map((item) => (Object.values(item).map((value) => value)))
@@ -51,8 +82,21 @@ export const BankTable = () => {
                         </TableHead>
                         <TableBody>
                             { datacol.map((item, index) => (
-                                <TableRow key={index}>
-                                    <Checkbox onChange={() => handleSelect(index)}/>
+                                <TableRow key={index} 
+                                    hover
+                                    role="checkbox"
+                                    checked={isSelected(item)}
+                                >
+                                    <TableCell padding="checkbox" id="tcell">
+                                        <Checkbox
+                                        onChange={() => handleSelect(item)}
+                                        // onChange={() => {
+                                        //     handleSelect(item)
+                                        //     dispatch(nextPage())
+                                        // }}
+                                        checked={isSelected(item)}      // Показ чекбокса залежить від цього аргументу
+                                        />
+                                    </TableCell>
                                     { item.map((value, ind) =>  (
                                         <TableCell key={ind}>{value}</TableCell>
                                     ))}

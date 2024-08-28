@@ -1,5 +1,5 @@
 import data from "../../data/data"
-import { SET_TABLE, SET_PAGE, NEXT_PAGE, PREVIOUS_PAGE } from "../actions/tableAction"
+import { SET_TABLE, SET_PAGE, NEXT_PAGE, PREVIOUS_PAGE, SELECTED } from "../actions/tableAction"
 
 
 const columnDefault = [
@@ -16,6 +16,7 @@ const columnDefault = [
 const initialState = {
     data: [],
     tabData: [],
+    selected: [],   // Масив з індексами вибраних рядків
     page: 5,
     offset: 0,
     prev: true,
@@ -62,6 +63,9 @@ function tableReducer(state = initialState, action) {
                 prev: true
             }
 
+        case SELECTED:
+            return {...state, selected: action.selec}
+        
         default:
             return state
     }

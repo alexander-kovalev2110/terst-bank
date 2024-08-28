@@ -11,16 +11,18 @@ import DownloadIcon from "@mui/icons-material/Download"
 
 import { PROC_STATUS, PUBLIC_STATUS } from "../store/reducers/statusReducer"
 import { setProcState, setPublicState } from "../store/actions/statusAction"
-import { openColumn } from "../store/actions/modalWindAction"
+import { openColumn, openLoad, openSearch } from "../store/actions/modalWindAction"
 import CheckColumn from "./CheckColumn"
+import SearchFormWind from "./SearchFormWind"
+import LoadWind from "./LoadWind"
 
 export const HandleBar = () => {
     const { procStatus, publicStatus } = useSelector(state => state.statusRed)
     const dispatch = useDispatch()
 
-    const handleSearch = () => {
-        // Розширенний пошук & Завантажити
-    }
+    // const handleSearch = () => {
+    //     //  Завантажити
+    // }
 
     return (
         <div>
@@ -45,7 +47,7 @@ export const HandleBar = () => {
                         labelId="demo-simple-select-helper-label"
                         id="demo-simple-select-helper"
                         value={publicStatus}
-                        label="Статус зублікації"
+                        label="Статус публікації"
                         onChange={(e) => dispatch(setPublicState(e.target.value))}
                     >
                         <MenuItem value={PUBLIC_STATUS.all}>Всі</MenuItem>
@@ -56,20 +58,22 @@ export const HandleBar = () => {
 
                 <Stack direction="row" spacing={10} sx={{marginLeft: '120px'}}>
                     <Button component="label" variant="outlined" endIcon={<SearchIcon />}
-                                color="inherit" onClick={handleSearch} sx={{ textTransform: 'none'}}>
+                                color="inherit" onClick={() => dispatch(openSearch())} sx={{ textTransform: 'none'}}>
                             Розширенний пошук
                     </Button>
                     <Button component="label" variant="outlined" endIcon={<ViewColumnIcon />}
                                 color="inherit" onClick={() => dispatch(openColumn())} >
                     </Button>
                     <Button component="label" variant="outlined" endIcon={<DownloadIcon />}
-                                color="inherit" onClick={handleSearch} sx={{ textTransform: 'none'}}>
+                                color="inherit" onClick={() => dispatch(openLoad())} sx={{ textTransform: 'none'}}>
                             Завантажити .csv
                     </Button>
                 </Stack>
             </Toolbar>
 
             <CheckColumn />
+            <SearchFormWind />
+            <LoadWind />
         </div>
         )
 }
